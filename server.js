@@ -5,11 +5,8 @@ const cTable = require('console.table');
 // establish connection to database
 var connection = mysql.createConnection({
     host: "localhost",
-    // Your port; if not 3306
     port: 3306,
-    // Your username
     user: "root",
-    // Your password
     password: "password",
     database: "employee_db"
 });
@@ -69,12 +66,12 @@ function addData() {
         ])
         .then(answers => {
             if (answers.table == "department table") {
-                connection.query("SELECT name FROM department_table;", function (err, res) {
+                connection.query("SELECT department FROM department_table;", function (err, res) {
                     if (err) throw err;
                     let departments = []
 
                     res.forEach(e => {
-                        departments.push(e.name)
+                        departments.push(e.department)
                     });
                     // var departments = res;
                     // console.log(departments.name)
@@ -97,7 +94,7 @@ function addData() {
                             connection.query(
                                 "INSERT INTO department_table SET ?",
                                 {
-                                    name: answers.department
+                                    department: answers.department
                                 },
                                 function (err, res) {
                                     if (err) throw err;
@@ -130,7 +127,7 @@ function addData() {
                         let departments = []
 
                         res_departments.forEach(e => {
-                            departments.push(e.name)
+                            departments.push(e.department)
                         });
 
                         departments.push("none of the above")
@@ -407,7 +404,7 @@ function updateData() {
 
 // ----------------------
 function viewDepartments() {
-    connection.query("SELECT * FROM department_table;", function (err, res) {
+    connection.query("SELECT department FROM department_table;", function (err, res) {
         if (err) throw err;
         const table = cTable.getTable(res);
         console.log(table)
@@ -416,7 +413,7 @@ function viewDepartments() {
 }
 
 function viewRoles() {
-    connection.query("SELECT * FROM role_table;", function (err, res) {
+    connection.query("SELECT role_table.title, role_table.salary, department_table.department FROM role_table INNER JOIN department_table ON role_table.department_id = department_table.id", function (err, res) {
         if (err) throw err;
         const table = cTable.getTable(res);
         console.log(table)
@@ -425,7 +422,7 @@ function viewRoles() {
 }
 
 function viewEmployees() {
-    connection.query("SELECT * FROM employee_table;", function (err, res) {
+    connection.query("SELECT employee_table.first_name, employee_table.last_name, role_table.title, role_table.salary, department_table.department FROM employee_table INNER JOIN role_table ON employee_table.role_id = role_table.id INNER JOIN department_table ON role_table.department_id = department_table.id", function (err, res) {
         if (err) throw err;
         const table = cTable.getTable(res);
         console.log(table)

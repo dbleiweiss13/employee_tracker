@@ -26,7 +26,7 @@ USE employee_db;
 -- department table
 CREATE TABLE department_table (
     id INT AUTO_INCREMENT NOT NULL,
-    name VARCHAR (30),
+    department VARCHAR (30),
     PRIMARY KEY (id)
 );
 
@@ -36,7 +36,8 @@ CREATE TABLE role_table (
     title VARCHAR(30),
     salary DECIMAL DEFAULT 0,
     department_id INT, 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (department_id) REFERENCES department_table(id)
 );
 
 -- employee table
@@ -45,7 +46,8 @@ CREATE TABLE employee_table (
     first_name VARCHAR(30),
     last_name VARCHAR(30),
     role_id INT, 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (role_id) REFERENCES role_table(id)
 );
 
 
